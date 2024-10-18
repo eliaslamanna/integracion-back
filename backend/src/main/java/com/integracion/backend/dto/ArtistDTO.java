@@ -22,10 +22,10 @@ public class ArtistDTO {
 
     private String bio;
 
-    private String socialNetworks;
+    private List<SocialMediaDTO> socialNetworks;
 
-    private String genres;
+    private List<GenreDTO> genres;
 
-    private List<Event> eventList;
+    private List<EventDTO> eventList;
 
 }

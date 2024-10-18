@@ -7,13 +7,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class EventDTO {
 
-    private Long id;
+    private UUID id;
 
     private LocalDate date;
 
@@ -42,7 +43,5 @@ public class EventDTO {
     private boolean available;
 
     private boolean visible;
-
-    private Artist artist;
 
 }

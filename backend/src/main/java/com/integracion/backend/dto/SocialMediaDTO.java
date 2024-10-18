@@ -1,6 +1,7 @@
 package com.integracion.backend.dto;
 
-
+import com.integracion.backend.model.Artist;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,18 +11,12 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDTO {
+public class SocialMediaDTO {
 
-    private UUID userId;
+    private UUID id;
 
-    private String username;
+    private String platform;
 
-    private String password;
-
-    private String firstName;
-
-    private String lastName;
-
-    private String email;
+    private String url;
 
 }

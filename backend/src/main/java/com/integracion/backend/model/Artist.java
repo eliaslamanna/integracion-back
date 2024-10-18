@@ -28,11 +28,11 @@ public class Artist {
     @Column(name="biography")
     private String bio;
 
-    @Column(name="social_networks")
-    private String socialNetworks;
+    @OneToMany(mappedBy = "artist")
+    private List<Genre> genres;
 
-    @Column()
-    private String genres; //seria ideal que tenga una tabla a parte.
+    @OneToMany(mappedBy = "artist")
+    private List<SocialMedia> socialMedia;
 
     @OneToMany(mappedBy = "artist")
     private List<Event> eventList;
