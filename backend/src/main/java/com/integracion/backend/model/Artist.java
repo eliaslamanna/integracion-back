@@ -37,11 +37,4 @@ public class Artist {
     @OneToMany(mappedBy = "artist")
     private List<Event> eventList;
 
-
-
-
-
-
-
-
 }

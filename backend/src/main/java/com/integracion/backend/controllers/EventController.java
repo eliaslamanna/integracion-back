@@ -1,8 +1,11 @@
+
 package com.integracion.backend.controllers;
 
 
+import com.integracion.backend.dto.EventDTO;
 import com.integracion.backend.dto.UserDTO;
 import com.integracion.backend.exception.ItemNotFoundException;
+import com.integracion.backend.services.EventService;
 import com.integracion.backend.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,16 +18,16 @@ import static org.springframework.http.ResponseEntity.ok;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/users")
-public class UserController {
+@RequestMapping("/event")
+public class EventController {
 
-    private final UserService userService;
+    private final EventService eventService;
 
-    @GetMapping("/getUsers")
-    public ResponseEntity<List<UserDTO>> getUsers() {
+    @GetMapping("/getEvents")
+    public ResponseEntity<List<EventDTO>> getEvents() {
         try {
-            List<UserDTO> users = userService.getListUsers();
-            return ok(users);
+            List<EventDTO> events = eventService.getAllEvents();
+            return ok(events);
         }
         catch (IllegalArgumentException e) {
             return new ResponseEntity<>(BAD_REQUEST);
@@ -35,22 +38,22 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> getById(@PathVariable String id) {
+    public ResponseEntity<EventDTO> getById(@PathVariable String id) {
         try {
-            UserDTO user = userService.getById(id);
+            EventDTO event = eventService.getById(id);
 
-            return ok(user);
+            return ok(event);
         }
         catch (ItemNotFoundException ie) {
             return new ResponseEntity<>(NOT_FOUND);
         }
     }
 
-    @PostMapping("/createUser")
-    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO user) {
+    @PostMapping("/createEvent")
+    public ResponseEntity<EventDTO> createEvent(@RequestBody EventDTO event) {
         try{
-            userService.addUser(user);
-            return new ResponseEntity<>(user, CREATED);
+            eventService.addArtist(event);
+            return new ResponseEntity<>(event, CREATED);
         }
         catch (IllegalArgumentException e) {
             return new ResponseEntity<>(BAD_REQUEST);
