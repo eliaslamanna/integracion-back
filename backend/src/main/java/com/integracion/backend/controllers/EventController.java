@@ -35,6 +35,13 @@ public class EventController {
         return ok(event);
     }
 
+    // de hoy a un mes
+    @GetMapping("/proximosEventos")
+    public ResponseEntity<List<EventDTO>> getProximosEventos() {
+        List<EventDTO> events = eventService.getProximosEventos();
+        return ok(events);
+    }
+
     @PostMapping("/createEvent")
     public ResponseEntity<EventDTO> createEvent(@RequestBody CreateEventRequest eventRequest) {
         EventDTO createdEvent = eventService.createEvent(eventRequest);

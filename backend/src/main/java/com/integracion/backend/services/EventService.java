@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,32 +26,40 @@ public class EventService {
 
     private final EventRepository eventRepository;
 
-    private final ModelMapper modelMapper;
+    private final EventConverter eventConverter;
+
+    private  final ModelMapper modelMapper;
 
     @Transactional
     public List<EventDTO> getAllEvents() {
         return eventRepository.findAll()
                 .stream()
-                .map(event -> modelMapper.map(event, EventDTO.class)).toList();
+                .map(eventConverter::mapToDTO).toList();
     }
 
     @Transactional
     public EventDTO getById(String id) {
-        var event = eventRepository.findById(fromString(id)).orElseThrow(ItemNotFoundException::new);
-        return modelMapper.map(event, EventDTO.class);
+        Event event = eventRepository.findById(fromString(id)).orElseThrow(ItemNotFoundException::new);
+        return eventConverter.mapToDTO(event);
     }
 
+    @Transactional
+    public List<EventDTO> getProximosEventos() {
+        LocalDate today = LocalDate.now();
+        LocalDate oneMonthFromNow = today.plusMonths(1);
+        return eventRepository.findByDateBetween(today, oneMonthFromNow).stream().map(eventConverter::mapToDTO).toList();
+    }
 
     @Transactional
     public EventDTO createEvent(CreateEventRequest eventRequest) {
-        Event event = modelMapper.map(eventRequest, Event.class);
+        Event event = eventConverter.mapToEvent(eventRequest);
 
         if(!eventRequest.getArtistIds().isEmpty()) {
             List<Artist> artists = artistService.getAllByIdIn(eventRequest.getArtistIds());
             event.setArtists(artists);
         }
 
-        return modelMapper.map(eventRepository.save(event), EventDTO.class);
+        return eventConverter.mapToDTO(eventRepository.save(event));
     }
 
     @Transactional
