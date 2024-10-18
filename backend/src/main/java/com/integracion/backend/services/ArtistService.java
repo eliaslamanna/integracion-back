@@ -1,6 +1,8 @@
 package com.integracion.backend.services;
 
 import com.integracion.backend.controllers.request.ArtistSearchParametersRequest;
+import com.integracion.backend.controllers.request.CreateArtistRequest;
+import com.integracion.backend.controllers.request.UpdateArtistRequest;
 import com.integracion.backend.dto.ArtistDTO;
 import com.integracion.backend.exception.ItemNotFoundException;
 import com.integracion.backend.model.Artist;
@@ -65,9 +67,16 @@ public class ArtistService {
     }
 
     @Transactional
-    public ArtistDTO addArtist(ArtistDTO artistDTO) {
+    public ArtistDTO addArtist(CreateArtistRequest artistDTO) {
         Artist artist = modelMapper.map(artistDTO, Artist.class);
         return modelMapper.map(artistRepository.save(artist), ArtistDTO.class);
+    }
+
+    @Transactional
+    public ArtistDTO updateArtist(String id, UpdateArtistRequest artistDTO) {
+        Artist artistToUpdate = artistRepository.findById(UUID.fromString(id)).orElseThrow(ItemNotFoundException::new);
+        modelMapper.map(artistDTO, artistToUpdate);
+        return modelMapper.map(artistRepository.save(artistToUpdate), ArtistDTO.class);
     }
 
 }

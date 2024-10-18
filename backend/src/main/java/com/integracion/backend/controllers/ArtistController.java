@@ -2,6 +2,8 @@ package com.integracion.backend.controllers;
 
 
 import com.integracion.backend.controllers.request.ArtistSearchParametersRequest;
+import com.integracion.backend.controllers.request.CreateArtistRequest;
+import com.integracion.backend.controllers.request.UpdateArtistRequest;
 import com.integracion.backend.dto.ArtistDTO;
 import com.integracion.backend.exception.ItemNotFoundException;
 import com.integracion.backend.services.ArtistService;
@@ -23,51 +25,32 @@ public class ArtistController {
 
     @GetMapping("/getArtists")
     public ResponseEntity<List<ArtistDTO>> getArtists() {
-        try {
-            List<ArtistDTO> artists = artistService.getAllArtists();
-            return ok(artists);
-        }
-        catch (Exception e) {
-            return new ResponseEntity<>(INTERNAL_SERVER_ERROR);
-        }
+        List<ArtistDTO> artists = artistService.getAllArtists();
+        return ok(artists);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ArtistDTO> getById(@PathVariable String id) {
-        try {
-            ArtistDTO artist = artistService.getById(id);
-
-            return ok(artist);
-        }
-        catch (ItemNotFoundException ie) {
-            return new ResponseEntity<>(NOT_FOUND);
-        }
+        ArtistDTO artist = artistService.getById(id);
+        return ok(artist);
     }
 
     @GetMapping("/search")
     public ResponseEntity<List<ArtistDTO>> getById(ArtistSearchParametersRequest searchRequest) {
-        try {
-            List<ArtistDTO> artists = artistService.search(searchRequest);
-
-            return ok(artists);
-        }
-        catch (Exception e) {
-            return new ResponseEntity<>(INTERNAL_SERVER_ERROR);
-        }
+        List<ArtistDTO> artists = artistService.search(searchRequest);
+        return ok(artists);
     }
 
     @PostMapping("/createUser")
-    public ResponseEntity<ArtistDTO> createArtist(@RequestBody ArtistDTO artist) {
-        try{
-            var createdArtist = artistService.addArtist(artist);
-            return new ResponseEntity<>(createdArtist, CREATED);
-        }
-        catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(BAD_REQUEST);
-        }
-        catch (Exception e) {
-            return new ResponseEntity<>(INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<ArtistDTO> createArtist(@RequestBody CreateArtistRequest artistRequest) {
+        var createdArtist = artistService.addArtist(artistRequest);
+        return new ResponseEntity<>(createdArtist, CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ArtistDTO> updateArtist(@PathVariable String id, @RequestBody UpdateArtistRequest artistRequest) {
+        var updatedArtist = artistService.updateArtist(id, artistRequest);
+        return ok(updatedArtist);
     }
 
 }
