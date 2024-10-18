@@ -4,12 +4,15 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.jackson.Jacksonized;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Jacksonized
 public class CreateArtistRequest {
 
     @NotBlank
@@ -19,8 +22,8 @@ public class CreateArtistRequest {
 
     private String bio;
 
-    private List<String> socialMediaIds;
+    private List<String> socialMediaIds = new ArrayList<>();
 
-    private List<String> genreIds;
+    private List<String> genreIds = new ArrayList<>();
 
 }

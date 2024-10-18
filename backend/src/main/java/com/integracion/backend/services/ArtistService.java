@@ -115,4 +115,10 @@ public class ArtistService {
         return modelMapper.map(artistRepository.save(artistToUpdate), ArtistDTO.class);
     }
 
+    @Transactional
+    public void deleteArtist(String id) {
+        Artist artistToDelete = artistRepository.findById(UUID.fromString(id)).orElseThrow(ItemNotFoundException::new);
+        artistRepository.delete(artistToDelete);
+    }
+
 }

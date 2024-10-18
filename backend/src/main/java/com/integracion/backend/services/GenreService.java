@@ -1,6 +1,7 @@
 package com.integracion.backend.services;
 
 import com.integracion.backend.controllers.request.CreateGenreRequest;
+import com.integracion.backend.controllers.request.UpdateGenreRequest;
 import com.integracion.backend.dto.GenreDTO;
 import com.integracion.backend.exception.ItemNotFoundException;
 import com.integracion.backend.model.Genre;
@@ -43,6 +44,19 @@ public class GenreService {
     public GenreDTO addGenre(CreateGenreRequest genreRequest) {
         var genre = modelMapper.map(genreRequest, Genre.class);
         return modelMapper.map(genreRepository.save(genre), GenreDTO.class);
+    }
+
+    @Transactional
+    public GenreDTO updateGenre(String id, UpdateGenreRequest genreRequest) {
+        Genre genreToUpdate = genreRepository.findById(UUID.fromString(id)).orElseThrow(ItemNotFoundException::new);
+        modelMapper.map(genreRequest, genreToUpdate);
+        return modelMapper.map(genreToUpdate, GenreDTO.class);
+    }
+
+    @Transactional
+    public void deleteGenre(String id) {
+        Genre genreToDelete = genreRepository.findById(UUID.fromString(id)).orElseThrow(ItemNotFoundException::new);
+        genreRepository.delete(genreToDelete);
     }
 
 }

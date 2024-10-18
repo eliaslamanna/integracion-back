@@ -1,6 +1,7 @@
 package com.integracion.backend.services;
 
 import com.integracion.backend.controllers.request.CreateSocialMediaRequest;
+import com.integracion.backend.controllers.request.UpdateSocialMediaRequest;
 import com.integracion.backend.dto.SocialMediaDTO;
 import com.integracion.backend.exception.ItemNotFoundException;
 import com.integracion.backend.model.SocialMedia;
@@ -43,6 +44,19 @@ public class SocialMediaService {
     public SocialMediaDTO addSocialMedia(CreateSocialMediaRequest socialMediaRequest) {
         var socialMedia = modelMapper.map(socialMediaRequest, SocialMedia.class);
         return modelMapper.map(socialMediaRepository.save(socialMedia), SocialMediaDTO.class);
+    }
+
+    @Transactional
+    public SocialMediaDTO updateSocialMedia(String id, UpdateSocialMediaRequest socialMediaRequest) {
+        SocialMedia socialMediaToUpdate = socialMediaRepository.findById(UUID.fromString(id)).orElseThrow(ItemNotFoundException::new);
+        modelMapper.map(socialMediaRequest, socialMediaToUpdate);
+        return modelMapper.map(socialMediaToUpdate, SocialMediaDTO.class);
+    }
+
+    @Transactional
+    public void deleteSocialMedia(String id) {
+        SocialMedia socialMediaToDelete = socialMediaRepository.findById(UUID.fromString(id)).orElseThrow(ItemNotFoundException::new);
+        socialMediaRepository.delete(socialMediaToDelete);
     }
 
 }

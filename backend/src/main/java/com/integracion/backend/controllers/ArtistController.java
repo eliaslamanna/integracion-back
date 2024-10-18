@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.ResponseEntity.noContent;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RequiredArgsConstructor
@@ -50,6 +51,12 @@ public class ArtistController {
     public ResponseEntity<ArtistDTO> updateArtist(@PathVariable String id, @RequestBody UpdateArtistRequest artistRequest) {
         var updatedArtist = artistService.updateArtist(id, artistRequest);
         return ok(updatedArtist);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> removeArtist(@PathVariable String id) {
+        artistService.deleteArtist(id);
+        return noContent().build();
     }
 
 }

@@ -2,6 +2,7 @@ package com.integracion.backend.controllers;
 
 
 import com.integracion.backend.controllers.request.CreateGenreRequest;
+import com.integracion.backend.controllers.request.UpdateGenreRequest;
 import com.integracion.backend.dto.GenreDTO;
 import com.integracion.backend.services.GenreService;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.ResponseEntity.noContent;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RequiredArgsConstructor
@@ -36,6 +38,18 @@ public class GenreController {
     public ResponseEntity<GenreDTO> createGenre(@RequestBody CreateGenreRequest genreRequest) {
         GenreDTO genre = genreService.addGenre(genreRequest);
         return new ResponseEntity<>(genre, CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<GenreDTO> updateGenre(@PathVariable String id, @RequestBody UpdateGenreRequest genreRequest) {
+        GenreDTO updatedGenre = genreService.updateGenre(id, genreRequest);
+        return ok(updatedGenre);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteGenre(@PathVariable String id) {
+        genreService.deleteGenre(id);
+        return noContent().build();
     }
 
 }

@@ -3,6 +3,7 @@ package com.integracion.backend.controllers;
 
 
 import com.integracion.backend.controllers.request.CreateEventRequest;
+import com.integracion.backend.controllers.request.UpdateEventRequest;
 import com.integracion.backend.dto.EventDTO;
 import com.integracion.backend.services.EventService;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +41,12 @@ public class EventController {
         return new ResponseEntity<>(createdEvent, CREATED);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<EventDTO> updateEvent(@PathVariable String id, @RequestBody UpdateEventRequest eventRequest) {
+        EventDTO updatedEvent = eventService.updateEvent(id, eventRequest);
+        return ok(updatedEvent);
+    }
+
     @PostMapping("/{id}/addArtist")
     public ResponseEntity<EventDTO> addArtist(@PathVariable String id, @RequestParam String artistId) {
         EventDTO event = eventService.addArtist(id, artistId);
@@ -49,6 +56,12 @@ public class EventController {
     @DeleteMapping("/{id}/removeArtist")
     public ResponseEntity<Void> removeArtist(@PathVariable String id, @RequestParam String artistId) {
         eventService.removeArtist(id, artistId);
+        return noContent().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> removeEvent(@PathVariable String id) {
+        eventService.deleteEvent(id);
         return noContent().build();
     }
 
