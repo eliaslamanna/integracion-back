@@ -1,5 +1,6 @@
 package com.integracion.backend.controllers.request;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,8 +8,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ArtistSearchParametersRequest {
+public class CreateGenreRequest {
 
-    private String artisticName;
+    @NotBlank
+    private String name;
 
 }

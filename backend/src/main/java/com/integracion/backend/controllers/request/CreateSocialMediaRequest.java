@@ -1,20 +1,19 @@
-package com.integracion.backend.dto;
+package com.integracion.backend.controllers.request;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SocialMediaDTO {
+public class CreateSocialMediaRequest {
 
-    private UUID id;
-
+    @NotBlank
     private String platform;
 
+    @NotBlank
     private String url;
 
 }

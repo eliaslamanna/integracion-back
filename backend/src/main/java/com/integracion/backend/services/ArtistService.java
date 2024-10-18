@@ -1,12 +1,13 @@
 package com.integracion.backend.services;
 
-import com.fasterxml.jackson.databind.deser.std.UUIDDeserializer;
 import com.integracion.backend.controllers.request.ArtistSearchParametersRequest;
 import com.integracion.backend.controllers.request.CreateArtistRequest;
 import com.integracion.backend.controllers.request.UpdateArtistRequest;
 import com.integracion.backend.dto.ArtistDTO;
 import com.integracion.backend.exception.ItemNotFoundException;
 import com.integracion.backend.model.Artist;
+import com.integracion.backend.model.Genre;
+import com.integracion.backend.model.SocialMedia;
 import com.integracion.backend.repository.ArtistRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -25,6 +26,10 @@ import java.util.UUID;
 @Service
 @AllArgsConstructor
 public class ArtistService {
+
+    private final GenreService genreService;
+
+    private final SocialMediaService socialMediaService;
 
     private final ArtistRepository artistRepository;
 
@@ -78,15 +83,35 @@ public class ArtistService {
     }
 
     @Transactional
-    public ArtistDTO addArtist(CreateArtistRequest artistDTO) {
-        Artist artist = modelMapper.map(artistDTO, Artist.class);
+    public ArtistDTO addArtist(CreateArtistRequest artistRequest) {
+        Artist artist = modelMapper.map(artistRequest, Artist.class);
+
+        if(!artistRequest.getGenreIds().isEmpty()) {
+            List<Genre> genres = genreService.getAllByIdIn(artistRequest.getGenreIds());
+            artist.setGenres(genres);
+        }
+        if(!artistRequest.getSocialMediaIds().isEmpty()) {
+            List<SocialMedia> socialMedias = socialMediaService.getAllByIdIn(artistRequest.getSocialMediaIds());
+            artist.setSocialMedia(socialMedias);
+        }
+
         return modelMapper.map(artistRepository.save(artist), ArtistDTO.class);
     }
 
     @Transactional
-    public ArtistDTO updateArtist(String id, UpdateArtistRequest artistDTO) {
+    public ArtistDTO updateArtist(String id, UpdateArtistRequest artistRequest) {
         Artist artistToUpdate = artistRepository.findById(UUID.fromString(id)).orElseThrow(ItemNotFoundException::new);
-        modelMapper.map(artistDTO, artistToUpdate);
+        modelMapper.map(artistRequest, artistToUpdate);
+
+        if(!artistRequest.getGenreIds().isEmpty()) {
+            List<Genre> genres = genreService.getAllByIdIn(artistRequest.getGenreIds());
+            artistToUpdate.setGenres(genres);
+        }
+        if(!artistRequest.getSocialNetworkIds().isEmpty()) {
+            List<SocialMedia> socialMedias = socialMediaService.getAllByIdIn(artistRequest.getSocialNetworkIds());
+            artistToUpdate.setSocialMedia(socialMedias);
+        }
+
         return modelMapper.map(artistRepository.save(artistToUpdate), ArtistDTO.class);
     }
 

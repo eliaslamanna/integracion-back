@@ -1,6 +1,5 @@
 package com.integracion.backend.controllers.request;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,8 +17,8 @@ public class UpdateArtistRequest {
 
     private String bio;
 
-    private String socialNetworks;
+    private List<String> socialNetworkIds;
 
-    private String genres;
+    private List<String> genreIds;
 
 }

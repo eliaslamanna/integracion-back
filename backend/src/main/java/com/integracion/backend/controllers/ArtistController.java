@@ -5,7 +5,6 @@ import com.integracion.backend.controllers.request.ArtistSearchParametersRequest
 import com.integracion.backend.controllers.request.CreateArtistRequest;
 import com.integracion.backend.controllers.request.UpdateArtistRequest;
 import com.integracion.backend.dto.ArtistDTO;
-import com.integracion.backend.exception.ItemNotFoundException;
 import com.integracion.backend.services.ArtistService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RequiredArgsConstructor
@@ -41,7 +40,7 @@ public class ArtistController {
         return ok(artists);
     }
 
-    @PostMapping("/createUser")
+    @PostMapping("/createArtist")
     public ResponseEntity<ArtistDTO> createArtist(@RequestBody CreateArtistRequest artistRequest) {
         var createdArtist = artistService.addArtist(artistRequest);
         return new ResponseEntity<>(createdArtist, CREATED);
