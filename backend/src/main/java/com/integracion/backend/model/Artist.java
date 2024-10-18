@@ -34,7 +34,7 @@ public class Artist {
     @OneToMany(mappedBy = "artist")
     private List<SocialMedia> socialMedia;
 
-    @OneToMany(mappedBy = "artist")
+    @ManyToMany(mappedBy = "artists")
     private List<Event> eventList;
 
 }
