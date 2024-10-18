@@ -1,6 +1,7 @@
-package com.integracion.backend.model;
+package com.integracion.backend.controllers.request;
 
-import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,60 +10,46 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-@Entity
-@Table(name="event")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Event {
+public class CreateEventRequest {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
-
-    @Column
+    @NotNull
     private LocalDate date;
 
-    @Column
+    @NotBlank
     private String location;
 
-    @Column
+    @NotBlank
     private String address;
 
-    @Column
     private String latitude;
 
-    @Column
     private String longitude;
 
-    @Column
+    @NotBlank
     private String city;
 
-    @Column
     private String region;
 
-    @Column
+    @NotBlank
     private String country;
 
-    @Column
+    @NotBlank
     private String title;
 
-    @Column
-    private double duration;
+    @NotNull
+    private Double duration;
 
-    @Column
     private String observation;
 
-    @Column(name="purchase_link")
     private String purchaseLink;
 
-    @Column
     private boolean available;
 
-    @Column
     private boolean visible;
 
-    @ManyToMany
-    private List<Artist> artists;
+    private List<String> artistIds;
 
 }

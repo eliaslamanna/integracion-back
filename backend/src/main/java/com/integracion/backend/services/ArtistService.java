@@ -1,5 +1,6 @@
 package com.integracion.backend.services;
 
+import com.fasterxml.jackson.databind.deser.std.UUIDDeserializer;
 import com.integracion.backend.controllers.request.ArtistSearchParametersRequest;
 import com.integracion.backend.controllers.request.CreateArtistRequest;
 import com.integracion.backend.controllers.request.UpdateArtistRequest;
@@ -42,6 +43,16 @@ public class ArtistService {
     public ArtistDTO getById(String id) {
         var artist = artistRepository.findById(UUID.fromString(id)).orElseThrow(ItemNotFoundException::new);
         return modelMapper.map(artist, ArtistDTO.class);
+    }
+
+    @Transactional
+    public Artist findById(String id) {
+        return artistRepository.findById(UUID.fromString(id)).orElseThrow(ItemNotFoundException::new);
+    }
+
+    @Transactional
+    public List<Artist> getAllByIdIn(List<String> ids) {
+        return artistRepository.findAllById(ids.stream().map(UUID::fromString).toList());
     }
 
     @Transactional

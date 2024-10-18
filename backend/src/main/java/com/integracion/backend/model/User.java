@@ -39,5 +39,5 @@ public class User {
 
     @OneToMany(cascade = {CascadeType.DETACH, CascadeType.PERSIST}, mappedBy = "user")
     private List<Follower> userFollowers;
-    
+
 }

@@ -22,42 +22,20 @@ public class UserController {
 
     @GetMapping("/getUsers")
     public ResponseEntity<List<UserDTO>> getUsers() {
-        try {
-            List<UserDTO> users = userService.getListUsers();
-            return ok(users);
-        }
-        catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(BAD_REQUEST);
-        }
-        catch (Exception e) {
-            return new ResponseEntity<>(INTERNAL_SERVER_ERROR);
-        }
+        List<UserDTO> users = userService.getListUsers();
+        return ok(users);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> getById(@PathVariable String id) {
-        try {
-            UserDTO user = userService.getById(id);
-
-            return ok(user);
-        }
-        catch (ItemNotFoundException ie) {
-            return new ResponseEntity<>(NOT_FOUND);
-        }
+        UserDTO user = userService.getById(id);
+        return ok(user);
     }
 
     @PostMapping("/createUser")
     public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO user) {
-        try{
-            userService.addUser(user);
-            return new ResponseEntity<>(user, CREATED);
-        }
-        catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(BAD_REQUEST);
-        }
-        catch (Exception e) {
-            return new ResponseEntity<>(INTERNAL_SERVER_ERROR);
-        }
+        userService.addUser(user);
+        return new ResponseEntity<>(user, CREATED);
     }
 
 }

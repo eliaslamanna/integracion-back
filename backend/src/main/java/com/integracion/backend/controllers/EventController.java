@@ -2,11 +2,9 @@
 package com.integracion.backend.controllers;
 
 
+import com.integracion.backend.controllers.request.CreateEventRequest;
 import com.integracion.backend.dto.EventDTO;
-import com.integracion.backend.dto.UserDTO;
-import com.integracion.backend.exception.ItemNotFoundException;
 import com.integracion.backend.services.EventService;
-import com.integracion.backend.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.ResponseEntity.noContent;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RequiredArgsConstructor
@@ -25,42 +24,32 @@ public class EventController {
 
     @GetMapping("/getEvents")
     public ResponseEntity<List<EventDTO>> getEvents() {
-        try {
-            List<EventDTO> events = eventService.getAllEvents();
-            return ok(events);
-        }
-        catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(BAD_REQUEST);
-        }
-        catch (Exception e) {
-            return new ResponseEntity<>(INTERNAL_SERVER_ERROR);
-        }
+        List<EventDTO> events = eventService.getAllEvents();
+        return ok(events);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<EventDTO> getById(@PathVariable String id) {
-        try {
-            EventDTO event = eventService.getById(id);
-
-            return ok(event);
-        }
-        catch (ItemNotFoundException ie) {
-            return new ResponseEntity<>(NOT_FOUND);
-        }
+        EventDTO event = eventService.getById(id);
+        return ok(event);
     }
 
     @PostMapping("/createEvent")
-    public ResponseEntity<EventDTO> createEvent(@RequestBody EventDTO event) {
-        try{
-            eventService.addArtist(event);
-            return new ResponseEntity<>(event, CREATED);
-        }
-        catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(BAD_REQUEST);
-        }
-        catch (Exception e) {
-            return new ResponseEntity<>(INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<EventDTO> createEvent(@RequestBody CreateEventRequest eventRequest) {
+        EventDTO createdEvent = eventService.createEvent(eventRequest);
+        return new ResponseEntity<>(createdEvent, CREATED);
+    }
+
+    @PostMapping("/{id}/addArtist")
+    public ResponseEntity<EventDTO> addArtist(@PathVariable String id, @RequestParam String artistId) {
+        EventDTO event = eventService.addArtist(id, artistId);
+        return ok(event);
+    }
+
+    @DeleteMapping("/{id}/removeArtist")
+    public ResponseEntity<EventDTO> removeArtist(@PathVariable String id, @RequestParam String artistId) {
+        eventService.removeArtist(id, artistId);
+        return noContent().build();
     }
 
 }
