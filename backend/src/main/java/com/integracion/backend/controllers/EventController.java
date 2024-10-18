@@ -47,7 +47,7 @@ public class EventController {
     }
 
     @DeleteMapping("/{id}/removeArtist")
-    public ResponseEntity<EventDTO> removeArtist(@PathVariable String id, @RequestParam String artistId) {
+    public ResponseEntity<Void> removeArtist(@PathVariable String id, @RequestParam String artistId) {
         eventService.removeArtist(id, artistId);
         return noContent().build();
     }
