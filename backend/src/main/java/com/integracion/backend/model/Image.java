@@ -2,30 +2,30 @@ package com.integracion.backend.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "social_media")
+@Table(name="image")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SocialMedia {
+@Builder
+public class Image {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
-
-    @Column(name = "platform")
-    private String platform;
+    @Column(name="image_id")
+    private UUID imageId;
 
     @Column(name = "url")
     private String url;
 
-    @ManyToMany(mappedBy = "socialMedia")
-    private List<Artist> artists;
+    @ManyToOne
+    @JoinColumn(name = "artist_id")
+    private Artist artist;
 
 }

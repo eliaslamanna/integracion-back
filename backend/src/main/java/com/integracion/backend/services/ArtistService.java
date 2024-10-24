@@ -7,6 +7,7 @@ import com.integracion.backend.dto.ArtistDTO;
 import com.integracion.backend.exception.ItemNotFoundException;
 import com.integracion.backend.model.Artist;
 import com.integracion.backend.model.Genre;
+import com.integracion.backend.model.Image;
 import com.integracion.backend.model.SocialMedia;
 import com.integracion.backend.repository.ArtistRepository;
 import jakarta.persistence.EntityManager;
@@ -30,6 +31,8 @@ public class ArtistService {
     private final GenreService genreService;
 
     private final SocialMediaService socialMediaService;
+
+    private final ImageService imageService;
 
     private final ArtistRepository artistRepository;
 
@@ -95,7 +98,17 @@ public class ArtistService {
             artist.setSocialMedia(socialMedias);
         }
 
-        return modelMapper.map(artistRepository.save(artist), ArtistDTO.class);
+        Artist savedArtist = artistRepository.save(artist);
+
+        if (!artistRequest.getImageUrls().isEmpty()) {
+            List<Image> imagesToSave = artistRequest.getImageUrls().stream()
+                    .map(url -> Image.builder().url(url).artist(savedArtist).build())
+                    .toList();
+
+            imageService.saveAll(imagesToSave);
+        }
+
+        return modelMapper.map(savedArtist, ArtistDTO.class);
     }
 
     @Transactional

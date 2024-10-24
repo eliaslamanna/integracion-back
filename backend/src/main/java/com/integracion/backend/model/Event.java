@@ -62,7 +62,7 @@ public class Event {
     @Column
     private boolean visible;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "eventList")
     private List<Artist> artists;
 
 }

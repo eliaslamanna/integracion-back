@@ -14,6 +14,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Artist {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name="artist_id")
@@ -28,13 +29,31 @@ public class Artist {
     @Column(name="biography")
     private String bio;
 
-    @OneToMany(mappedBy = "artist")
+    @ManyToMany
+    @JoinTable(
+            name = "artist_genre",
+            joinColumns = @JoinColumn(name = "artist_id"),
+            inverseJoinColumns = @JoinColumn(name = "genre_id")
+    )
     private List<Genre> genres;
 
-    @OneToMany(mappedBy = "artist")
+    @ManyToMany
+    @JoinTable(
+            name = "artist_social_media",
+            joinColumns = @JoinColumn(name = "artist_id"),
+            inverseJoinColumns = @JoinColumn(name = "social_media_id")
+    )
     private List<SocialMedia> socialMedia;
 
-    @ManyToMany(mappedBy = "artists")
+    @ManyToMany
+    @JoinTable(
+            name = "artist_event",
+            joinColumns = @JoinColumn(name = "artist_id"),
+            inverseJoinColumns = @JoinColumn(name = "event_id")
+    )
     private List<Event> eventList;
+
+    @OneToMany(mappedBy = "artist", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Image> images;
 
 }

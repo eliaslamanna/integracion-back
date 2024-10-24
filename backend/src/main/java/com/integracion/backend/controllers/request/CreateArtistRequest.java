@@ -26,4 +26,6 @@ public class CreateArtistRequest {
 
     private List<String> genreIds = new ArrayList<>();
 
+    private List<String> imageUrls = new ArrayList<>();
+
 }

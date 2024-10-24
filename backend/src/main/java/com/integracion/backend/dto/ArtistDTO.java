@@ -26,4 +26,6 @@ public class ArtistDTO {
 
     private List<EventDTO> eventList;
 
+    private List<ImageDTO> images;
+
 }
