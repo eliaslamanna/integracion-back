@@ -56,4 +56,14 @@ public class Artist {
     @OneToMany(mappedBy = "artist", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images;
 
+    @Override
+    public String toString() {
+        return "Artist{" +
+                "artistId=" + artistId +
+                ", artisticName='" + artisticName + '\'' +
+                ", legalOwner='" + legalOwner + '\'' +
+                ", bio='" + bio + '\'' +
+
+                '}';
+    }
 }
