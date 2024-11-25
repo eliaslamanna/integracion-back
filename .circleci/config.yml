@@ -12,7 +12,7 @@ jobs:
       - persist_to_workspace:
           root: .
           paths:
-            - target/*.jar # Incluye cualquier archivo .jar generado
+            - backend/target/*.jar # Incluye cualquier archivo .jar generado
 
   deploy:
     docker:
