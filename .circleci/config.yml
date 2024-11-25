@@ -1,31 +1,55 @@
-# Use the latest 2.1 version of CircleCI pipeline process engine.
-# See: https://circleci.com/docs/configuration-reference
 version: 2.1
 
-# Define a job to be invoked later in a workflow.
-# See: https://circleci.com/docs/jobs-steps/#jobs-overview & https://circleci.com/docs/configuration-reference/#jobs
-jobs:
-  say-hello:
-    # Specify the execution environment. You can specify an image from Docker Hub or use one of our convenience images from CircleCI's Developer Hub.
-    # See: https://circleci.com/docs/executor-intro/ & https://circleci.com/docs/configuration-reference/#executor-job
-    docker:
-      # Specify the version you desire here
-      # See: https://circleci.com/developer/images/image/cimg/base
-      - image: cimg/base:current
+executors:
+  default-machine:
+    machine:
+      image: ubuntu-2204:2023.09.1
 
-    # Add steps to the job
-    # See: https://circleci.com/docs/jobs-steps/#steps-overview & https://circleci.com/docs/configuration-reference/#steps
+jobs:
+  build:
+    executor: default-machine
     steps:
-      # Checkout the code as the first step.
       - checkout
       - run:
-          name: "Say hello"
-          command: "echo Hello, World!"
+          name: Instalar Java 17
+          command: sudo apt install openjdk-17-jdk -y
+      - run:
+          name: Instalar Maven
+          command: sudo apt install maven -y
+      - run:
+          name: Compilar aplicación
+          command: mvn clean package -Dmaven.test.skip
+      - persist_to_workspace:
+          root: .
+          paths:
+            - target/*.jar  # Incluye cualquier archivo .jar generado
 
-# Orchestrate jobs using workflows
-# See: https://circleci.com/docs/workflows/ & https://circleci.com/docs/configuration-reference/#workflows
+  deploy:
+    executor: default-machine
+    steps:
+      - attach_workspace:
+          at: /workspace
+      - run:
+          name: Transferir archivos a EC2
+          command: |
+            echo "${AWS_PRIVATE_KEY}" > ~/.ssh/id_rsa
+            chmod 600 ~/.ssh/id_rsa
+            scp -o StrictHostKeyChecking=no /workspace/target/*.jar ubuntu@${EC2_IP}:/home/ubuntu/BackArtistas/integracion-back/backend/target/
+      - run:
+          name: Reiniciar aplicación en EC2
+          command: |
+            ssh -o StrictHostKeyChecking=no ubuntu@${EC2_IP} << 'EOF'
+            pkill -f 'java -jar' || true 
+            nohup java -jar /home/ubuntu/BackArtistas/integracion-back/backend/target/*.jar > /home/ubuntu/BackArtistas/integracion-back/backend/target/app.log 2>&1 &
+            EOF
+
 workflows:
-  say-hello-workflow: # This is the name of the workflow, feel free to change it to better match your workflow.
-    # Inside the workflow, you define the jobs you want to run.
+  build-and-deploy:
     jobs:
-      - say-hello
+      - build  # Build en todas las ramas
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: main  # Deploy solo en main
