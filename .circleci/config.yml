@@ -7,9 +7,6 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Instalar Java 17
-          command: sudo apt install openjdk-17-jdk -y
-      - run:
           name: Instalar Maven
           command: sudo apt install maven -y
       - run:
