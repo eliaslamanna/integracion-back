@@ -19,7 +19,7 @@ jobs:
       - image: cimg/openjdk:17.0
     steps:
       - attach_workspace:
-          at: /workspace
+          at: .
       - run:
           name: Transferir archivos a EC2
           command: |
