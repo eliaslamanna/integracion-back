@@ -38,10 +38,8 @@ jobs:
       - run:
           name: Reiniciar aplicación en EC2
           command: |
-            ssh -o StrictHostKeyChecking=no ubuntu@${EC2_IP} << 'EOF'
-            pkill -f 'java -jar' || true 
-            nohup java -jar /home/ubuntu/BackArtistas/integracion-back/backend/target/*.jar > /home/ubuntu/BackArtistas/integracion-back/backend/target/app.log 2>&1 &
-            EOF
+            ssh -o StrictHostKeyChecking=no ubuntu@${EC2_IP} "pkill -f 'java -jar' || true"
+            ssh -o StrictHostKeyChecking=no ubuntu@${EC2_IP} "nohup java -jar /home/ubuntu/BackArtistas/integracion-back/backend/target/*.jar > /home/ubuntu/BackArtistas/integracion-back/backend/target/app.log 2>&1 &"
 
 workflows:
   build-and-deploy:
