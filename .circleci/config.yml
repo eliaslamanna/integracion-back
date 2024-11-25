@@ -8,11 +8,11 @@ jobs:
       - checkout
       - run:
           name: Compilar aplicación
-          command: mvn clean package -Dmaven.test.skip
+          command: cd BackArtistas/integracion-back/backend && mvn clean package -Dmaven.test.skip
       - persist_to_workspace:
           root: .
           paths:
-            - target/*.jar  # Incluye cualquier archivo .jar generado
+            - BackArtistas/integracion-back/backend/target/*.jar  # Incluye cualquier archivo .jar generado
 
   deploy:
     docker:
