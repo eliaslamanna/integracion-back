@@ -25,7 +25,7 @@ jobs:
           command: |
             echo "${AWS_PRIVATE_KEY}" > ~/.ssh/id_rsa
             chmod 600 ~/.ssh/id_rsa
-            scp -o StrictHostKeyChecking=no /workspace/target/*.jar ubuntu@${EC2_IP}:/home/ubuntu/BackArtistas/integracion-back/backend/target/
+            scp -o StrictHostKeyChecking=no /./backend/target/*.jar ubuntu@${EC2_IP}:/home/ubuntu/BackArtistas/integracion-back/backend/target/
       - run:
           name: Reiniciar aplicación en EC2
           command: |
