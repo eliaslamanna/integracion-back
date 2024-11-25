@@ -7,9 +7,6 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Instalar Maven
-          command: sudo apt install maven -y
-      - run:
           name: Compilar aplicación
           command: mvn clean package -Dmaven.test.skip
       - persist_to_workspace:
