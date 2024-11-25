@@ -23,6 +23,7 @@ jobs:
       - run:
           name: Transferir archivos a EC2
           command: |
+            mkdir -p ~/.ssh
             echo "${AWS_PRIVATE_KEY}" > ~/.ssh/id_rsa
             chmod 600 ~/.ssh/id_rsa
             scp -o StrictHostKeyChecking=no ~/backend/target/*.jar ubuntu@${EC2_IP}:/home/ubuntu/BackArtistas/integracion-back/backend/target/
