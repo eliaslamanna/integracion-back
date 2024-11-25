@@ -1,0 +1,44 @@
+version: 2.1
+
+jobs:
+  build:
+    docker:
+      - image: cimg/openjdk:17.0
+    steps:
+      - checkout
+      - run:
+          name: Compilar aplicación
+          command: cd backend && mvn clean package -Dmaven.test.skip
+      - persist_to_workspace:
+          root: .
+          paths:
+            - backend/target/*.jar # Incluye cualquier archivo .jar generado
+
+  deploy:
+    docker:
+      - image: cimg/openjdk:17.0
+    steps:
+      - attach_workspace:
+          at: /workspace
+      - run:
+          name: Transferir archivos a EC2
+          command: |
+            echo "${AWS_PRIVATE_KEY}" > ~/.ssh/id_rsa
+            chmod 600 ~/.ssh/id_rsa
+            scp -o StrictHostKeyChecking=no /workspace/target/*.jar ubuntu@${EC2_IP}:/home/ubuntu/BackArtistas/integracion-back/backend/target/
+      - run:
+          name: Reiniciar aplicación en EC2
+          command: |
+            ssh -o StrictHostKeyChecking=no ubuntu@${EC2_IP} "pkill -f 'java -jar' || true"
+            ssh -o StrictHostKeyChecking=no ubuntu@${EC2_IP} "nohup java -jar /home/ubuntu/BackArtistas/integracion-back/backend/target/*.jar > /home/ubuntu/BackArtistas/integracion-back/backend/target/app.log 2>&1 &"
+
+workflows:
+  build-and-deploy:
+    jobs:
+      - build  # Build en todas las ramas
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: main  # Deploy solo en main
