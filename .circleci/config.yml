@@ -1,13 +1,9 @@
 version: 2.1
 
-executors:
-  default-machine:
-    machine:
-      image: ubuntu-2204:2023.09.1
-
 jobs:
   build:
-    executor: default-machine
+    machine:
+      image: ubuntu-2204:2023.09.1
     steps:
       - checkout
       - run:
