@@ -60,7 +60,12 @@ public class Event {
     private String purchaseLink;
 
 
-    @ManyToMany(mappedBy = "eventList")
+    @ManyToMany
+    @JoinTable(
+            name = "artist_event",
+            joinColumns = @JoinColumn(name = "event_id"),
+            inverseJoinColumns = @JoinColumn(name = "artist_id")
+    )
     private List<Artist> artists;
 
 }

@@ -47,12 +47,7 @@ public class Artist {
     )
     private List<SocialMedia> socialMedia;
 
-    @ManyToMany
-    @JoinTable(
-            name = "artist_event",
-            joinColumns = @JoinColumn(name = "artist_id"),
-            inverseJoinColumns = @JoinColumn(name = "event_id")
-    )
+    @ManyToMany(mappedBy = "artists")
     private List<Event> eventList;
 
     @OneToMany(mappedBy = "artist", cascade = CascadeType.ALL, orphanRemoval = true)

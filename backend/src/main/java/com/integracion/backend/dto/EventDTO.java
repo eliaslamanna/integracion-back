@@ -51,6 +51,6 @@ public class EventDTO {
 
     private double precioVipBEAT;
 
-    private List<UserEventDTO> artistNames;
+    private List<String> artistNames;
 
 }

@@ -11,6 +11,7 @@ import com.integracion.backend.repository.EventRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Limit;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -50,7 +51,7 @@ public class EventService {
     public List<EventDTO> getProximosEventos() {
         LocalDate today = LocalDate.now();
         LocalDate oneMonthFromNow = today.plusMonths(1);
-        return eventRepository.findByDateBetween(today, oneMonthFromNow).stream().map(eventConverter::mapToDTO).toList();
+        return eventRepository.findByFechaBetween(today, oneMonthFromNow, Limit.unlimited()).stream().map(eventConverter::mapToDTO).toList();
     }
 
     @Transactional
