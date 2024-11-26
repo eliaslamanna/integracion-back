@@ -21,6 +21,9 @@ jobs:
       - attach_workspace:
           at: .
       - run:
+          name: Verify Mavencommand
+          command: mvn --version
+      - run:
           name: Transferir archivos a EC2
           command: |
             echo "${AWS_PRIVATE_KEY}" > /home/ubuntu/.ssh/id_rsa
