@@ -2,55 +2,47 @@ version: 2.1
 
 jobs:
   build:
-    machine:
-      image: ubuntu-2204:2023.09
-      resource_class: xsmall
+    docker:
+      - image: cimg/openjdk:17.0
     steps:
       - checkout
-      - run:
-          name: Instalar Java 17
-          command: sudo apt install openjdk-17-jdk -y
-      - run:
-          name: Instalar Maven
-          command: sudo apt install maven -y
       - run:
           name: Compilar aplicación
           command: cd backend && mvn clean package -Dmaven.test.skip
       - persist_to_workspace:
           root: .
           paths:
-            - backend/target/*.jar
+            - backend/target/*.jar # Incluye cualquier archivo .jar generado
 
   deploy:
-    machine:
-      image: ubuntu-2204:2023.09
-      resource_class: xsmall
+    docker:
+      - image: cimg/openjdk:17.0
     steps:
       - attach_workspace:
           at: .
       - run:
-          name: Configure SSH Key
-          command: |
-            mkdir -p /tmp/ssh
-            echo "${AWS_PRIVATE_KEY}" > /tmp/ssh/id_rsa
-            chmod 600 /tmp/ssh/id_rsa
-      - run:
           name: Transferir archivos a EC2
           command: |
-            scp -i /tmp/ssh/id_rsa -o StrictHostKeyChecking=no backend/target/*.jar ubuntu@${EC2_IP}:/home/ubuntu/BackArtistas/integracion-back/backend/target/
+            mkdir -p ~/.ssh
+            echo "${AWS_PRIVATE_KEY}" > ~/.ssh/id_rsa
+      - run:
+          name: test
+          command: |
+            chmod 400 ~/.ssh/id_rsa
+            scp -o StrictHostKeyChecking=no ~/backend/target/*.jar ubuntu@${EC2_IP}:/home/ubuntu/BackArtistas/integracion-back/backend/target/
       - run:
           name: Reiniciar aplicación en EC2
           command: |
-            ssh -i /tmp/ssh/id_rsa -o StrictHostKeyChecking=no ubuntu@${EC2_IP} "pkill -f 'java -jar' || true"
-            ssh -i /tmp/ssh/id_rsa -o StrictHostKeyChecking=no ubuntu@${EC2_IP} "nohup java -jar /home/ubuntu/BackArtistas/integracion-back/backend/target/*.jar > /home/ubuntu/BackArtistas/integracion-back/backend/target/app.log 2>&1 &"
+            ssh -o StrictHostKeyChecking=no ubuntu@${EC2_IP} "pkill -f 'java -jar' || true"
+            ssh -o StrictHostKeyChecking=no ubuntu@${EC2_IP} "nohup java -jar /home/ubuntu/BackArtistas/integracion-back/backend/target/*.jar > /home/ubuntu/BackArtistas/integracion-back/backend/target/app.log 2>&1 &"
 
 workflows:
   build-and-deploy:
     jobs:
-      - build
+      - build  # Build en todas las ramas
       - deploy:
           requires:
             - build
           filters:
             branches:
-              only: main
+              only: main  # Deploy solo en main
