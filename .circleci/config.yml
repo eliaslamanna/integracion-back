@@ -26,6 +26,7 @@ jobs:
       - run:
           name: Transferir archivos a EC2
           command: |
+            ls backend/target/*.jar
             scp -o StrictHostKeyChecking=no ~/backend/target/*.jar ubuntu@${EC2_IP}:/home/ubuntu/BackArtistas/integracion-back/backend/target/
       - run:
           name: Reiniciar aplicación en EC2
