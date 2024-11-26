@@ -20,7 +20,7 @@ jobs:
     steps:
       - add_ssh_keys:
           fingerprints:
-            - "54:6e:93:80:64:63:f6:f3:26:ff:d2:40:b0:7a:21:fa:c2:fe:38:f7"
+            - "SHA256:ta1h7vzv4k5gC/dO8xKEm97tGxB9bvjQ66pKODE5ciU"
       - attach_workspace:
           at: .
       - run:
