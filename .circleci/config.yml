@@ -25,7 +25,7 @@ jobs:
           command: |
             mkdir -p ~/.ssh
             chmod 700 ~/.ssh
-            echo "${AWS_PRIVATE_KEY}" > ~/.ssh/id_rsa
+            echo "${AWS_PRIVATE_KEY}" | tr -d '\r' > ~/.ssh/id_rsa
             chmod 400 ~/.ssh/id_rsa
             ssh-keyscan -H ${EC2_IP} >> ~/.ssh/known_hosts
             chmod 644 ~/.ssh/known_hosts
