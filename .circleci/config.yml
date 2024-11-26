@@ -37,7 +37,7 @@ jobs:
 workflows:
   build-and-deploy:
     jobs:
-      - build # Build en todas las ramas
+      - build  # Build en todas las ramas
       - deploy:
           requires:
             - build
