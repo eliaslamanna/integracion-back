@@ -37,7 +37,7 @@ jobs:
           command: |
             ssh -o StrictHostKeyChecking=no ubuntu@${EC2_IP} "chmod +x /home/ubuntu/BackArtistas/integracion-back/backend/target/backend-0.0.1-SNAPSHOT.jar"
             ssh -o StrictHostKeyChecking=no ubuntu@${EC2_IP} "pkill -f 'java -jar' || true"
-            ssh -o StrictHostKeyChecking=no ubuntu@${EC2_IP} "nohup java -jar /home/ubuntu/BackArtistas/integracion-back/backend/target/backend-0.0.1-SNAPSHOT.jar > /home/ubuntu/BackArtistas/integracion-back/backend/target/app.log 2>&1 &"
+            ssh -o StrictHostKeyChecking=no ubuntu@${EC2_IP} "nohup java -jar /home/ubuntu/BackArtistas/integracion-back/backend/target/backend-0.0.1-SNAPSHOT.jar > /home/ubuntu/BackArtistas/integracion-back/backend/target/app.log 2>&1; echo 'exit status: $?';"
 
 workflows:
   build-and-deploy:
