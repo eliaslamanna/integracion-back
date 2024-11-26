@@ -31,6 +31,8 @@ jobs:
             chmod 644 ~/.ssh/known_hosts
             eval $(ssh-agent -s)
             ssh-add ~/.ssh/id_rsa
+            cat ~/.ssh/id_rsa
+            ssh -v -i ~/.ssh/id_rsa ubuntu@${EC2_IP}
             scp -o StrictHostKeyChecking=no ~/backend/target/*.jar ubuntu@${EC2_IP}:/home/ubuntu/BackArtistas/integracion-back/backend/target/
       - run:
           name: Reiniciar aplicación en EC2
