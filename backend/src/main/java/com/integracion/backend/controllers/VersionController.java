@@ -9,6 +9,6 @@ public class VersionController {
 
         @RequestMapping("")
         public String getVersion() {
-            return "1.0.0";
+            return "1.0.1";
         }
 }
