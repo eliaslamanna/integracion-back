@@ -29,15 +29,10 @@ jobs:
             ls backend/target/*.jar
             scp -o StrictHostKeyChecking=no backend/target/backend-0.0.1-SNAPSHOT.jar ubuntu@${EC2_IP}:/home/ubuntu/BackArtistas/integracion-back/backend/target/
       - run:
-          name: Verificar existencia del archivo en EC2
-          command: |
-            ssh -o StrictHostKeyChecking=no ubuntu@${EC2_IP} "ls -l /home/ubuntu/BackArtistas/integracion-back/backend/target/backend-0.0.1-SNAPSHOT.jar"
-      - run:
           name: Reiniciar aplicación en EC2
           command: |
-            ssh -o StrictHostKeyChecking=no ubuntu@${EC2_IP} "chmod +x /home/ubuntu/BackArtistas/integracion-back/backend/target/backend-0.0.1-SNAPSHOT.jar"
-            ssh -o StrictHostKeyChecking=no ubuntu@${EC2_IP} "pkill -f 'java -jar' || true"
-            ssh -o StrictHostKeyChecking=no ubuntu@${EC2_IP} "nohup java -jar /home/ubuntu/BackArtistas/integracion-back/backend/target/backend-0.0.1-SNAPSHOT.jar > /home/ubuntu/BackArtistas/integracion-back/backend/target/app.log 2>&1; echo 'exit status: $?';"
+            ssh -v -o StrictHostKeyChecking=no ubuntu@${EC2_IP} "pkill -f 'java -jar' || true"
+            ssh -v -o StrictHostKeyChecking=no ubuntu@${EC2_IP} "nohup java -jar /home/ubuntu/BackArtistas/integracion-back/backend/target/backend-0.0.1-SNAPSHOT.jar > /home/ubuntu/BackArtistas/integracion-back/backend/target/app_output.log 2>&1 &"
 
 workflows:
   build-and-deploy:
