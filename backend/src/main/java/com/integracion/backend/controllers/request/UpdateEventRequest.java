@@ -5,38 +5,48 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateEventRequest {
+    private LocalDate fecha;
 
-    private LocalDate date;
 
-    private String location;
+    private int estadio;
 
-    private String address;
 
-    private String latitude;
+    private double cantidadSectorGeneral;
 
-    private String longitude;
 
-    private String city;
+    private double precioGeneralBEAT;
 
-    private String region;
 
-    private String country;
+    private double cantidadSectorIzquierda;
 
-    private String title;
 
-    private double duration;
+    private double precioIzquierdaBEAT;
 
-    private String observation;
 
-    private String purchaseLink;
+    private double cantidadSectorDerecha;
 
-    private boolean available;
 
-    private boolean visible;
+    private double precioDerechaBEAT;
+
+
+    private String imagenPrincipal;
+
+
+    private boolean habilitado;
+
+
+    private double cantidadSectorVip;
+
+
+    private double precioVipBEAT;
+
+    private List<String> artistIds = new ArrayList<>();
 
 }

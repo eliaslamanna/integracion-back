@@ -1,5 +1,6 @@
 package com.integracion.backend.services;
 
+import com.integracion.backend.aws.SendCreateArtistEvent;
 import com.integracion.backend.controllers.request.CreateEventRequest;
 import com.integracion.backend.controllers.request.UpdateEventRequest;
 import com.integracion.backend.dto.EventDTO;
@@ -30,6 +31,8 @@ public class EventService {
 
     private  final ModelMapper modelMapper;
 
+    private final SendCreateArtistEvent sendCreateArtistEvent;
+
     @Transactional
     public List<EventDTO> getAllEvents() {
         return eventRepository.findAll()
@@ -58,15 +61,16 @@ public class EventService {
             List<Artist> artists = artistService.getAllByIdIn(eventRequest.getArtistIds());
             event.setArtists(artists);
         }
+        Event eventCreated = eventRepository.save(event);
 
-        return eventConverter.mapToDTO(eventRepository.save(event));
+        return eventConverter.mapToDTO(eventCreated);
     }
 
     @Transactional
     public EventDTO updateEvent(String id, UpdateEventRequest eventRequest) {
         Event eventToUpdate = eventRepository.findById(UUID.fromString(id)).orElseThrow(ItemNotFoundException::new);
         modelMapper.map(eventRequest, eventToUpdate);
-
+        eventRepository.save(eventToUpdate);
         return modelMapper.map(eventToUpdate, EventDTO.class);
     }
 

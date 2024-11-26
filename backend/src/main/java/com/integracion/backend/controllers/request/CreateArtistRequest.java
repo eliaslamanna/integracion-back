@@ -28,4 +28,6 @@ public class CreateArtistRequest {
 
     private List<String> imageUrls = new ArrayList<>();
 
+    private String email;
+
 }

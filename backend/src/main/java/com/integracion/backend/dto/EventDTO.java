@@ -1,5 +1,6 @@
 package com.integracion.backend.dto;
 
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,36 +14,43 @@ import java.util.UUID;
 @NoArgsConstructor
 public class EventDTO {
 
-    private UUID id;
+    private Long id;
 
-    private LocalDate date;
+    private LocalDate fecha;
 
-    private String location;
 
-    private String address;
+    private int estadio;
 
-    private String latitude;
 
-    private String longitude;
+    private double cantidadSectorGeneral;
 
-    private String city;
 
-    private String region;
+    private double precioGeneralBEAT;
 
-    private String country;
 
-    private String title;
+    private double cantidadSectorIzquierda;
 
-    private double duration;
 
-    private String observation;
+    private double precioIzquierdaBEAT;
 
-    private String purchaseLink;
 
-    private boolean available;
+    private double cantidadSectorDerecha;
 
-    private boolean visible;
 
-    private List<String> artistNames;
+    private double precioDerechaBEAT;
+
+
+    private String imagenPrincipal;
+
+
+    private boolean habilitado;
+
+
+    private double cantidadSectorVip;
+
+
+    private double precioVipBEAT;
+
+    private List<UserEventDTO> artistNames;
 
 }

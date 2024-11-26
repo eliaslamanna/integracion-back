@@ -1,5 +1,6 @@
 package com.integracion.backend.controllers.request;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -17,40 +18,40 @@ import java.util.List;
 @Jacksonized
 public class CreateEventRequest {
 
-    @NotNull
-    private LocalDate date;
+    private LocalDate fecha;
 
-    @NotBlank
-    private String location;
 
-    @NotBlank
-    private String address;
+    private int estadio;
 
-    private String latitude;
 
-    private String longitude;
+    private double cantidadSectorGeneral;
 
-    @NotBlank
-    private String city;
 
-    private String region;
+    private double precioGeneralBEAT;
 
-    @NotBlank
-    private String country;
 
-    @NotBlank
-    private String title;
+    private double cantidadSectorIzquierda;
 
-    @NotNull
-    private Double duration;
 
-    private String observation;
+    private double precioIzquierdaBEAT;
 
-    private String purchaseLink;
 
-    private boolean available;
+    private double cantidadSectorDerecha;
 
-    private boolean visible;
+
+    private double precioDerechaBEAT;
+
+
+    private String imagenPrincipal;
+
+
+    private boolean habilitado;
+
+
+    private double cantidadSectorVip;
+
+
+    private double precioVipBEAT;
 
     private List<String> artistIds = new ArrayList<>();
 

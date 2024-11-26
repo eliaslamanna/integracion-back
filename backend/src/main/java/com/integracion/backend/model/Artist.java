@@ -29,6 +29,8 @@ public class Artist {
     @Column(name="biography")
     private String bio;
 
+    private String email;
+
     @ManyToMany
     @JoinTable(
             name = "artist_genre",

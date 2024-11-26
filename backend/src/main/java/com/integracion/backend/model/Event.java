@@ -17,50 +17,48 @@ import java.util.UUID;
 public class Event {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column
-    private LocalDate date;
+    private LocalDate fecha;
 
     @Column
-    private String location;
+    private int estadio;
 
     @Column
-    private String address;
+    private double cantidadSectorGeneral;
 
     @Column
-    private String latitude;
+    private double precioGeneralBEAT;
 
     @Column
-    private String longitude;
+    private double cantidadSectorIzquierda;
 
     @Column
-    private String city;
+    private double precioIzquierdaBEAT;
 
     @Column
-    private String region;
+    private double cantidadSectorDerecha;
 
     @Column
-    private String country;
+    private double precioDerechaBEAT;
 
     @Column
-    private String title;
+    private String imagenPrincipal;
 
     @Column
-    private double duration;
+    private boolean habilitado;
 
     @Column
-    private String observation;
+    private double cantidadSectorVip;
+
+    @Column
+    private double precioVipBEAT;
 
     @Column(name="purchase_link")
     private String purchaseLink;
 
-    @Column
-    private boolean available;
-
-    @Column
-    private boolean visible;
 
     @ManyToMany(mappedBy = "eventList")
     private List<Artist> artists;
