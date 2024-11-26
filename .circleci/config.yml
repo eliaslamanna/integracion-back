@@ -32,7 +32,7 @@ jobs:
           name: test
           command: |
             chmod 400 ~/.ssh/id_rsa
-            scp -o -v StrictHostKeyChecking=no ~/backend/target/*.jar ubuntu@${EC2_IP}:/home/ubuntu/BackArtistas/integracion-back/backend/target/
+            scp -o StrictHostKeyChecking=no ~/backend/target/*.jar ubuntu@${EC2_IP}:/home/ubuntu/BackArtistas/integracion-back/backend/target/
       - run:
           name: Reiniciar aplicación en EC2
           command: |
