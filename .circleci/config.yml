@@ -30,7 +30,7 @@ jobs:
       - run:
           name: Apagar aplicación en EC2
           command: |
-            ssh -o StrictHostKeyChecking=no ubuntu@${EC2_IP} "pkill -f 'java -jar' || true"
+            ssh -v -o StrictHostKeyChecking=no ubuntu@${EC2_IP} "pkill -f 'java -jar' || true"
       - run:
           name: Levantar aplicación en EC2
           command: |
