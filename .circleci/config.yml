@@ -4,7 +4,7 @@ jobs:
   build:
     machine:
       image: ubuntu-2204:2023.09
-      resource_class: small
+      resource_class: xsmall
     steps:
       - checkout
       - run:
@@ -24,7 +24,7 @@ jobs:
   deploy:
     machine:
       image: ubuntu-2204:2023.09
-      resource_class: small
+      resource_class: xsmall
     steps:
       - attach_workspace:
           at: .
