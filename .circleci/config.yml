@@ -7,12 +7,18 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Verify Maven
+          command: mvn --version
+      - run:
           name: Compilar aplicación
           command: cd backend && mvn clean package -Dmaven.test.skip
+      - run:
+          name: Debug Build Artifacts
+          command: ls -R backend/target
       - persist_to_workspace:
           root: .
           paths:
-            - backend/target/*.jar # Incluye cualquier archivo .jar generado
+            - backend/target/*.jar
 
   deploy:
     docker:
@@ -21,27 +27,28 @@ jobs:
       - attach_workspace:
           at: .
       - run:
-          name: Verify Mavencommand
-          command: mvn --version
-      - run:
-          name: Transferir archivos a EC2
+          name: Configure SSH Key
           command: |
             echo "${AWS_PRIVATE_KEY}" > /home/ubuntu/.ssh/id_rsa
             chmod 600 /home/ubuntu/.ssh/id_rsa
-            scp -o StrictHostKeyChecking=no ~/backend/target/*.jar ubuntu@${EC2_IP}:/home/ubuntu/BackArtistas/integracion-back/backend/target/
+      - run:
+          name: Transferir archivos a EC2
+          command: |
+            scp -o StrictHostKeyChecking=no backend/target/*.jar ubuntu@${EC2_IP}:/home/ubuntu/BackArtistas/integracion-back/backend/target/
       - run:
           name: Reiniciar aplicación en EC2
           command: |
             ssh -o StrictHostKeyChecking=no ubuntu@${EC2_IP} "pkill -f 'java -jar' || true"
             ssh -o StrictHostKeyChecking=no ubuntu@${EC2_IP} "nohup java -jar /home/ubuntu/BackArtistas/integracion-back/backend/target/*.jar > /home/ubuntu/BackArtistas/integracion-back/backend/target/app.log 2>&1 &"
+            ssh -o StrictHostKeyChecking=no ubuntu@${EC2_IP} "ps aux | grep 'java -jar'"
 
 workflows:
   build-and-deploy:
     jobs:
-      - build  # Build en todas las ramas
+      - build
       - deploy:
           requires:
             - build
           filters:
             branches:
-              only: main  # Deploy solo en main
+              only: main
